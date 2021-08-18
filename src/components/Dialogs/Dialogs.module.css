@@ -1,0 +1,12 @@
+.users{
+display: flex;
+flex-direction: column;
+}
+.messages{
+
+}
+.dialogs{
+    display:flex;
+    padding:10px;
+    justify-content: space-around;
+}
