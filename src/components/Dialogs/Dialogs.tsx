@@ -1,32 +1,49 @@
-import React from "react";
-import {NavLink} from "react-router-dom";
+import React, {ChangeEvent} from "react";
 import s from "./Dialogs.module.css"
-import {User, UserType} from "./user";
+import {User} from "./user";
 import {Message} from "./Messages";
+import state, {DialogsType, MessagesType, sendMessageAC, updateNewMessageBody} from "../../redux/state";
 
 
-export const Dialogs = () => {
-    const MessageArray=[
-        {id:1,text:'Hello man'},
-        {id:2,text:'Do u want go for a walk today?'},
-        {id:3,text:'Wat are u doing?'}
-    ]
-    let mappedMessage=MessageArray.map((m)=><Message text={m.text} id={m.id}/>)
-    const UserArray = [
-        {id: 1, name: "Dmitriy.K"},
-        {id: 2, name: "Ekaterina.G"},
-        {id: 3, name: "Iliya.Y"},
-        {id: 4, name: "Zakhar.Y"},
-        {id: 5, name: "Pavel.M"}
-    ]
-    let mappedUser=UserArray.map((u)=><User name={u.name} id={u.id}/>)
+export type DialogsPropsType = {
+    UsersArray: DialogsType
+    MessageArray: MessagesType
+}
+
+export const Dialogs = (props: DialogsPropsType) => {
+
+    let newMessageBody = state._state.messagesPage.newMessageBody
+
+    let onNewMessageChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+        let body = e.currentTarget.value
+        state.dispatch(updateNewMessageBody(body))
+    }
+    let onSendMessageClick = () => {
+        state.dispatch(sendMessageAC())
+    }
+    let mappedMessage = props.MessageArray.map((m) => <Message text={m.text} id={m.id}/>)
+    let mappedUser = props.UsersArray.map((u) => <User name={u.name} id={u.id}/>)
     return (
         <div className={s.dialogs}>
             <div className={s.users}>
                 {mappedUser}
             </div>
             <div className={s.messages}>
-                {mappedMessage}
+                <div>{mappedMessage}</div>
+                <div>
+                    <div>
+                        <textarea
+                            value={newMessageBody}
+                            placeholder={"Enter your message"}
+                            onChange={onNewMessageChange}
+                        >
+
+                         </textarea>
+                    </div>
+                    <div>
+                        <button onClick={onSendMessageClick}>Send</button>
+                    </div>
+                </div>
             </div>
         </div>
     )

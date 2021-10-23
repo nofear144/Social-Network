@@ -1,26 +1,44 @@
-import React from "react";
+import React, {ChangeEvent} from "react";
 import s from "./MyPosts.module.css"
 import Post from "./Post/Post";
+import {ActionType, addPostAC, changeNewTextAC, PostsType} from "../../../redux/state";
 
-const MyPosts = () => {
-    let postArray=[
-        {id:1, message:"Hello man ,How are u?",value:10},
-        {id:2, message:"It's my first post",value:15},
-        {id:3, message:"It's my first post",value:112},
-        {id:4, message:"It's my first post",value:14}
-    ]
-    let mappedPost= postArray.map((p)=>{
-        return  <Post message ={p.message} value={p.value}/>
+
+export type MyPostsPropsType = {
+    posts: PostsType
+    dispatch: (action: ActionType) => void
+    newPostText: string
+}
+
+
+const MyPosts = (props: MyPostsPropsType) => {
+
+    let mappedPost = props.posts.map((p) => {
+        return <Post message={p.message} value={p.value}/>
     })
+
+    let newPost = () => {
+
+        props.dispatch(addPostAC(props.newPostText))
+
+
+    }
+    let onPostChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+        let text = e.currentTarget.value;
+
+        props.dispatch(changeNewTextAC(text))
+
+    }
+
     return (
         <div>
-            <h3> My posts</h3>
+            <h3>My posts</h3>
             <div>
                 <div>
-                    <textarea></textarea>
+                    <textarea onChange={onPostChange} value={props.newPostText}></textarea>
                 </div>
                 <div>
-                    <button>Add new post</button>
+                    <button onClick={newPost}>Add new post</button>
                 </div>
             </div>
             <div className={s.posts}>
