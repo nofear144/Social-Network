@@ -4,44 +4,43 @@ import Header from "./components/Header/Header";
 import Navbar from "./components/Navbar/Navbar";
 import Profile from "./components/Profile/Profile";
 import {Dialogs} from "./components/Dialogs/Dialogs";
-import { Route} from "react-router-dom";
+import {Route} from "react-router-dom";
 import {News} from "./components/News/News";
 import {Music} from "./components/Music/Music";
 import {Settings} from "./components/Settings/Settings";
-import store, {ActionType, stateType} from "./redux/state";
+import {reducersType} from "./redux/redux-store";
+import {useSelector} from "react-redux";
 
 
 
 
-export type AppPropsType = {
-    state:stateType
-    dispatch:(action:ActionType)=>void
-    newPostText:string
-}
-
-function App(props: AppPropsType) {
+function App() {
+    let profile = useSelector((state: reducersType) => state.profile)
+    let messagesPage = useSelector((state: reducersType) => state.messagesPage)
+    let newPostText = useSelector((state: reducersType) => state.profile.newPostText)
     return (
 
-            <div className='app-wrapper'>
-                <Header/>
-                <Navbar/>
-                <div className="app-wrapper-content">
-                    <Route path='/dialogs' render={() => <Dialogs
-                        UsersArray={props.state.profile.dialogs}
-                        MessageArray={props.state.messagesPage.messages}
-                    />}/>
-                    <Route path='/profile' render={() => <Profile
-                        dispatch={props.dispatch}
-                        posts={props.state.profile.posts}
-                        newPostText={props.newPostText}
+        <div className='app-wrapper'>
+            <Header/>
+            <Navbar/>
+            <div className="app-wrapper-content">
+                <Route path='/dialogs' render={() => <Dialogs
+                    UsersArray={profile.dialogs}
+                    MessagePage={messagesPage}
 
-                    />}/>
-                    <Route path='/news' render={() => <News/>}/>
-                    <Route path='/music' render={() => <Music/>}/>
-                    <Route path='/settings' render={() => <Settings/>}/>
-                </div>
+                />}/>
+                <Route path='/profile' render={() => <Profile
 
+                    posts={profile.posts}
+                    newPostText={newPostText}
+
+                />}/>
+                <Route path='/news' render={() => <News/>}/>
+                <Route path='/music' render={() => <Music/>}/>
+                <Route path='/settings' render={() => <Settings/>}/>
             </div>
+
+        </div>
     )
 }
 

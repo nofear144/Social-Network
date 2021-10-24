@@ -2,26 +2,29 @@ import React, {ChangeEvent} from "react";
 import s from "./Dialogs.module.css"
 import {User} from "./user";
 import {Message} from "./Messages";
-import state, {DialogsType, MessagesType, sendMessageAC, updateNewMessageBody} from "../../redux/state";
+import {DialogsType, messagesPageType,  sendMessageAC, updateNewMessageBody} from "../../redux/state";
+import {useDispatch} from "react-redux";
 
 
 export type DialogsPropsType = {
     UsersArray: DialogsType
-    MessageArray: MessagesType
+    MessagePage: messagesPageType
 }
 
-export const Dialogs = (props: DialogsPropsType) => {
 
-    let newMessageBody = state._state.messagesPage.newMessageBody
+
+export const Dialogs = (props: DialogsPropsType) => {
+    let dispatch=useDispatch()
+    let newMessageBody = props.MessagePage.newMessageBody
 
     let onNewMessageChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
         let body = e.currentTarget.value
-        state.dispatch(updateNewMessageBody(body))
+        dispatch(updateNewMessageBody(body))
     }
     let onSendMessageClick = () => {
-        state.dispatch(sendMessageAC())
+        dispatch(sendMessageAC())
     }
-    let mappedMessage = props.MessageArray.map((m) => <Message text={m.text} id={m.id}/>)
+    let mappedMessage = props.MessagePage.messages.map((m) => <Message text={m.text} id={m.id}/>)
     let mappedUser = props.UsersArray.map((u) => <User name={u.name} id={u.id}/>)
     return (
         <div className={s.dialogs}>
