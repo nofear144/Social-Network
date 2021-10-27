@@ -1,34 +1,23 @@
 import React, {ChangeEvent} from "react";
 import s from "./MyPosts.module.css"
 import Post from "./Post/Post";
-import {ActionType, addPostAC, changeNewTextAC, PostsType} from "../../../redux/state";
-import {useDispatch} from "react-redux";
-
-
-export type MyPostsPropsType = {
-    posts: PostsType
-    newPostText: string
-}
+import {MyPostsContainerType} from "./MyPostsContainer";
 
 
 
-const MyPosts = (props: MyPostsPropsType) => {
-    let dispatch=useDispatch()
+
+
+const MyPosts = (props: MyPostsContainerType) => {
     let mappedPost = props.posts.map((p) => {
         return <Post message={p.message} value={p.value}/>
     })
 
     let newPost = () => {
-
-        dispatch(addPostAC(props.newPostText))
-
-
+        props.addPost(props.newPostText)
     }
     let onPostChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
         let text = e.currentTarget.value;
-
-       dispatch(changeNewTextAC(text))
-
+        props.changeNewText(text)
     }
 
     return (
