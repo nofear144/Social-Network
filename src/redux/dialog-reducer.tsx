@@ -17,7 +17,6 @@ export const dialogReducer = (state: messagesPageType = initialState, action: Ac
         case "SEND-MESSAGE":
             let body = state.newMessageBody;
             state.newMessageBody = "";
-
             return {...state,messages:[...state.messages,{id: 4, text: body}]}
 
         default:

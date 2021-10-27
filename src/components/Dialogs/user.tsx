@@ -2,12 +2,12 @@ import React from "react";
 import {NavLink} from "react-router-dom";
 import s from "./Dialogs.module.css";
 
-export type UserType = {
+type UserPropsType = {
     name: string
     id: number
 }
 
-export const User = (props: UserType) => {
+export const User = (props: UserPropsType) => {
     return (
         <NavLink to={"/dialogs/" + props.id} className={s.user}>
             {props.name}
