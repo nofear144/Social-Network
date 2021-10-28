@@ -2,7 +2,7 @@ import {profileReducer} from "./profile-reducer";
 import {dialogReducer} from "./dialog-reducer";
 import {sidebarReducer} from "./sidebar-reducer";
 
-export let renderTree = () => {
+/*export let renderTree = () => {
 
 }
 export type DialogType = {
@@ -52,7 +52,7 @@ export type ActionType = AddPostActionType
 export type AddPostActionType = ReturnType<typeof addPostAC>
 export type ChangeNewTextActionType = ReturnType<typeof changeNewTextAC>
 export type sendMessageActionType = ReturnType<typeof sendMessageAC>
-export type updateNewMessageBody = ReturnType<typeof updateNewMessageBody>
+export type updateNewMessageBody = ReturnType<typeof updateNewMessageBody>*/
 
 
 /*export let store: StoreType = {
@@ -113,6 +113,7 @@ export type updateNewMessageBody = ReturnType<typeof updateNewMessageBody>
 }*/
 
 
+/*
 export const changeNewTextAC = (newText: string) => {
     return {
         type: "CHANGE-NEW-TEXT",
@@ -136,5 +137,6 @@ export const updateNewMessageBody = (body: any) => {
         body
     } as const
 }
+*/
 
 
