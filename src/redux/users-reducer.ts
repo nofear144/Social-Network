@@ -3,6 +3,7 @@ let initialState: initialStateType = {
     pageSize: 5,
     totalUsersCount: 0,
     currentPage: 3,
+    isFetching: false,
 }
 
 
@@ -18,7 +19,9 @@ export const usersReducer = (state: initialStateType = initialState, action: com
         case "SET-CURRENT-PAGE":
             return {...state, currentPage: action.page}
         case "SET-CURRENT-PAGE-TOTAL-COUNT":
-            return {...state,totalUsersCount:action.count}
+            return {...state, totalUsersCount: action.count}
+        case "SET-PRELOADER-STATUS":
+            return {...state,isFetching:action.status}
         default:
             return state
     }
@@ -55,6 +58,13 @@ export const setCurrentPageTotalCountAC = (count: number) => {
         count
     } as const
 }
+export const setPreloaderStatusAC = (status: boolean) => {
+    return {
+        type: "SET-PRELOADER-STATUS",
+        status
+
+    } as const
+}
 
 
 //Types
@@ -79,15 +89,18 @@ export type initialStateType = {
     pageSize: number
     totalUsersCount: number
     currentPage: number
+    isFetching: boolean
 }
+export type followAcType = ReturnType<typeof followAC>
+export type unfollowAcType = ReturnType<typeof unfollowAC>
+export type setUsersAcType = ReturnType<typeof setUsersAC>
+export type setCurrentPageAcType = ReturnType<typeof setCurrentPageAC>
+export type setCurrentPageTotalCountAcType = ReturnType<typeof setCurrentPageTotalCountAC>
+export type PreloaderAcType = ReturnType<typeof setPreloaderStatusAC>
 export type combineAcTypes =
     | followAcType
     | unfollowAcType
     | setUsersAcType
-    | setCurrentPageACType
-    | setCurrentPageTotalCountACType
-export type followAcType = ReturnType<typeof followAC>
-export type unfollowAcType = ReturnType<typeof unfollowAC>
-export type setUsersAcType = ReturnType<typeof setUsersAC>
-export type setCurrentPageACType = ReturnType<typeof setCurrentPageAC>
-export type setCurrentPageTotalCountACType = ReturnType<typeof setCurrentPageTotalCountAC>
+    | setCurrentPageAcType
+    | setCurrentPageTotalCountAcType
+    | PreloaderAcType

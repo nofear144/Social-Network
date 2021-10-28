@@ -1,4 +1,4 @@
-import {ActionType, PostType, profileType} from "./state";
+import {PostType, profileType} from "./state";
 
 let initialState = {
     posts: [
@@ -18,7 +18,7 @@ let initialState = {
     ],
 }
 
-export const profileReducer = (state: profileType = initialState, action: ActionType) => {
+export const profileReducer = (state: profileType = initialState, action: combineAcTypesForProfile) => {
     switch (action.type) {
 
         case "ADD-POST":
@@ -48,3 +48,6 @@ export const addPostAC = (postText: string) => {
         postText
     } as const
 }
+export type combineAcTypesForProfile =
+    | ReturnType<typeof changeNewTextAC>
+    | ReturnType<typeof addPostAC>

@@ -2,7 +2,7 @@ import {profileReducer} from "./profile-reducer";
 import {dialogReducer} from "./dialog-reducer";
 import {sidebarReducer} from "./sidebar-reducer";
 
-/*export let renderTree = () => {
+export let renderTree = () => {
 
 }
 export type DialogType = {
@@ -30,29 +30,13 @@ export type messagesPageType = {
     messages: MessagesType
     newMessageBody: string
 }
-export type  stateType = {
+/*export type  stateType = {
     profile: profileType
     messagesPage: messagesPageType;
     sidebar:{},
-}
-export  type StoreType = {
-    _state: stateType,
+}*/
 
-    ChangeNewText: (newText: string) => void,
-    addPost: (newText: string) => void,
-    _callSubscriber: () => void;
-    subscribe: (observer: () => void) => void,
-    getState: () => stateType,
-    dispatch: (action: ActionType) => void
-}
-export type ActionType = AddPostActionType
-    | ChangeNewTextActionType
-    | sendMessageActionType
-    | updateNewMessageBody
-export type AddPostActionType = ReturnType<typeof addPostAC>
-export type ChangeNewTextActionType = ReturnType<typeof changeNewTextAC>
-export type sendMessageActionType = ReturnType<typeof sendMessageAC>
-export type updateNewMessageBody = ReturnType<typeof updateNewMessageBody>*/
+
 
 
 /*export let store: StoreType = {
