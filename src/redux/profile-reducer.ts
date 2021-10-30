@@ -1,4 +1,5 @@
-import {PostType, profileType} from "./state";
+import {PostType, profilePageType} from "./state";
+import {ResponseProfileType} from "../components/Profile/ProfileContainer";
 
 let initialState = {
     posts: [
@@ -8,6 +9,27 @@ let initialState = {
         {id: 4, message: "It's my first post", value: 14},
     ],
     newPostText: "",
+    profile: {
+        userId: 2,
+        lookingForAJob: true,
+        lookingForAJobDescription: "",
+        fullName: "",
+        contacts: {
+            github: "",
+            vk: "",
+            facebook: "",
+            instagram: "",
+            twitter: "",
+            website: "",
+            youtube: "",
+            mainLink: "",
+        },
+
+        photos: {
+            small: "",
+            large: ""
+        },
+    },
 
     dialogs: [
         {id: 1, name: "Dmitriy.K"},
@@ -18,7 +40,7 @@ let initialState = {
     ],
 }
 
-export const profileReducer = (state: profileType = initialState, action: combineAcTypesForProfile) => {
+export const profileReducer = (state: profilePageType = initialState, action: combineAcTypesForProfile): profilePageType => {
     switch (action.type) {
 
         case "ADD-POST":
@@ -28,14 +50,17 @@ export const profileReducer = (state: profileType = initialState, action: combin
             return {...state, posts: [...state.posts, newPost]};
 
         case "CHANGE-NEW-TEXT":
-
             return {...state, newPostText: action.newText}
+        case "SET-USER-PROFILE":
+            return {...state, profile: action.profile}
         default:
             return state
     }
 
 }
 
+
+//AC
 export const changeNewTextAC = (newText: string) => {
     return {
         type: "CHANGE-NEW-TEXT",
@@ -48,6 +73,13 @@ export const addPostAC = (postText: string) => {
         postText
     } as const
 }
+export const setUserProfile = (profile: any) => {
+    return {
+        type: "SET-USER-PROFILE",
+        profile
+    } as const
+}
 export type combineAcTypesForProfile =
     | ReturnType<typeof changeNewTextAC>
     | ReturnType<typeof addPostAC>
+    | ReturnType<typeof setUserProfile>

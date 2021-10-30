@@ -28,37 +28,37 @@ export const usersReducer = (state: initialStateType = initialState, action: com
 
 }
 //Action Creators
-export const followAC = (userId: number) => {
+export const follow = (userId: number) => {
     return {
         type: "FOLLOW",
         userId,
     } as const
 }
-export const unfollowAC = (userId: number) => {
+export const unfollow = (userId: number) => {
     return {
         type: "UNFOLLOW",
         userId,
     } as const
 }
-export const setUsersAC = (users: userType[]) => {
+export const setUsers = (users: userType[]) => {
     return {
         type: "SET-USERS",
         users
     } as const
 }
-export const setCurrentPageAC = (page: number) => {
+export const setCurrentPage = (page: number) => {
     return {
         type: "SET-CURRENT-PAGE",
         page
     } as const
 }
-export const setCurrentPageTotalCountAC = (count: number) => {
+export const setCurrentPageTotalCount = (count: number) => {
     return {
         type: "SET-CURRENT-PAGE-TOTAL-COUNT",
         count
     } as const
 }
-export const setPreloaderStatusAC = (status: boolean) => {
+export const setPreloaderStatus = (status: boolean) => {
     return {
         type: "SET-PRELOADER-STATUS",
         status
@@ -68,15 +68,11 @@ export const setPreloaderStatusAC = (status: boolean) => {
 
 
 //Types
-export type ResponseType = {
-    items: userType[]
-    totalCount: number,
-    error: string,
-}
+
 export type userType = {
     name: string
     id: number
-    photo: photosType
+    photos: photosType
     status: string
     followed: boolean
 }
@@ -91,12 +87,12 @@ export type initialStateType = {
     currentPage: number
     isFetching: boolean
 }
-export type followAcType = ReturnType<typeof followAC>
-export type unfollowAcType = ReturnType<typeof unfollowAC>
-export type setUsersAcType = ReturnType<typeof setUsersAC>
-export type setCurrentPageAcType = ReturnType<typeof setCurrentPageAC>
-export type setCurrentPageTotalCountAcType = ReturnType<typeof setCurrentPageTotalCountAC>
-export type PreloaderAcType = ReturnType<typeof setPreloaderStatusAC>
+export type followAcType = ReturnType<typeof follow>
+export type unfollowAcType = ReturnType<typeof unfollow>
+export type setUsersAcType = ReturnType<typeof setUsers>
+export type setCurrentPageAcType = ReturnType<typeof setCurrentPage>
+export type setCurrentPageTotalCountAcType = ReturnType<typeof setCurrentPageTotalCount>
+export type PreloaderAcType = ReturnType<typeof setPreloaderStatus>
 export type combineAcTypes =
     | followAcType
     | unfollowAcType

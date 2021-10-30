@@ -1,13 +1,12 @@
 import React from "react";
 import {connect} from "react-redux";
 import {rootReducerType} from "../../redux/redux-store";
-import {Dispatch} from "redux";
 import {
-    followAC, ResponseType,
-    setCurrentPageAC,
-    setCurrentPageTotalCountAC, setPreloaderStatusAC,
-    setUsersAC,
-    unfollowAC,
+    follow,
+    setCurrentPage,
+    setCurrentPageTotalCount, setPreloaderStatus,
+    setUsers,
+    unfollow,
     userType
 } from "../../redux/users-reducer";
 import axios from "axios";
@@ -15,7 +14,8 @@ import {UsersPresentationComponent} from "./UsersPresentationComponent";
 import preloader from "../../images/loading-svgrepo-com.svg"
 
 
-export class UsersApiComponent extends React.Component<UsersContainerType> {
+
+export class UsersComponent extends React.Component<UsersContainerType> {
     constructor(props: UsersContainerType) {
         super(props);
     }
@@ -31,7 +31,7 @@ export class UsersApiComponent extends React.Component<UsersContainerType> {
                 .then(res => {
                     this.props.setPreloaderStatus(false)
                     this.props.setUsers(res.data.items)
-                    this.props.setTotalCurrentUsers(res.data.totalCount)
+                    this.props.setCurrentPageTotalCount(res.data.totalCount)
                 })
         }
 
@@ -74,31 +74,8 @@ let mapStateToProps = (state: rootReducerType) => {
         isFetching: state.usersPage.isFetching,
     }
 }
-let mapDispatchToProps = (dispatch: Dispatch) => {
-    return {
-        follow: (userId: number) => {
-            dispatch(followAC(userId))
-        },
-        unfollow: (userId: number) => {
-            dispatch(unfollowAC(userId))
-        },
-        setUsers: (users: userType[]) => {
-            dispatch(setUsersAC(users))
-        },
-        setCurrentPage: (page: number) => {
-            dispatch(setCurrentPageAC(page))
 
-        },
-        setTotalCurrentUsers: (count: number) => {
-            dispatch(setCurrentPageTotalCountAC(count))
-        },
-        setPreloaderStatus: (status: boolean) => {
-            dispatch(setPreloaderStatusAC(status))
-        }
-    }
-}
-
-export const UsersContainer = connect(mapStateToProps, mapDispatchToProps)(UsersApiComponent)
+export const UsersContainer = connect(mapStateToProps, {follow,unfollow,setUsers,setCurrentPage,setCurrentPageTotalCount,setPreloaderStatus})(UsersComponent)
 
 //Types
 
@@ -112,6 +89,11 @@ export type UsersContainerType = {
     unfollow: (userId: number) => void
     setUsers: (users: userType[]) => void
     setCurrentPage: (page: number) => void
-    setTotalCurrentUsers: (count: number) => void
+    setCurrentPageTotalCount: (count: number) => void
     setPreloaderStatus: (status: boolean) => void
+}
+export type ResponseType = {
+    items: userType[]
+    totalCount: number,
+    error: string,
 }

@@ -1,17 +1,18 @@
 import React from "react";
 import s from "./usersClassComponent.module.css";
-import {UsersContainerType} from "./UsersContainer";
+
 import {userType} from "../../redux/users-reducer";
+import {NavLink} from "react-router-dom";
 
 //Types
 export type UsersPresentationComponent = {
-    onChangePage:(page:number)=>void
-    totalUsersCount:number
-    pageSize:number
-    currentPage:number
-    users:userType[]
-    follow:(userId: number) => void
-    unfollow:(userId: number) => void
+    onChangePage: (page: number) => void
+    totalUsersCount: number
+    pageSize: number
+    currentPage: number
+    users: userType[]
+    follow: (userId: number) => void
+    unfollow: (userId: number) => void
 
 }
 
@@ -22,6 +23,9 @@ export const UsersPresentationComponent = (props: UsersPresentationComponent) =>
     for (let i = 1; i <= pagesCount; i++) {
         pages.push(i)
     }
+
+
+    debugger
     return <div>
         <div>
             {pages.map(p => <span className={props.currentPage === p ? s.selectedPage : ""}
@@ -30,10 +34,15 @@ export const UsersPresentationComponent = (props: UsersPresentationComponent) =>
                 </span>)}
         </div>
 
-        {props.users.map(u => <div key={u.id}>
+        {
+            props.users.map(u => <div key={u.id}>
                 <span>
                     <div>
-                        <img src={u.photo && u.photo.small} className={s.photo}/>
+                        <NavLink to={`/profile/${u.id}`}>
+                        <img
+                            src={u.photos ? u.photos.small : 'https://icon-library.com/images/avatar-icon-images/avatar-icon-images-4.jpg'}
+                            className={s.photo}/>
+                            </NavLink>
                     </div>
                     <div>
                         {u.followed
@@ -43,7 +52,7 @@ export const UsersPresentationComponent = (props: UsersPresentationComponent) =>
 
                     </div>
                 </span>
-            <span>
+                <span>
                     <span>
                         <div>{u.name}</div>
                         <div>{u.status}</div>
@@ -53,7 +62,7 @@ export const UsersPresentationComponent = (props: UsersPresentationComponent) =>
                         <div>u.location.city</div>
                     </span>
                 </span>
-        </div>)
+            </div>)
         }
     </div>
 }

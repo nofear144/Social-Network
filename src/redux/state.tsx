@@ -1,6 +1,7 @@
 import {profileReducer} from "./profile-reducer";
 import {dialogReducer} from "./dialog-reducer";
 import {sidebarReducer} from "./sidebar-reducer";
+import {ResponseProfileType} from "../components/Profile/ProfileContainer";
 
 export let renderTree = () => {
 
@@ -21,17 +22,18 @@ export type PostType = {
 export type PostsType = PostType[]
 export type DialogsType = Array<DialogType>;
 export type MessagesType = Array<MessageType>;
-export type profileType = {
+export type profilePageType = {
     posts: PostsType
     newPostText: string
     dialogs: DialogsType
+    profile:ResponseProfileType
 }
 export type messagesPageType = {
     messages: MessagesType
     newMessageBody: string
 }
 /*export type  stateType = {
-    profile: profileType
+    profile: profilePageType
     messagesPage: messagesPageType;
     sidebar:{},
 }*/
