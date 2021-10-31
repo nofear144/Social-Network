@@ -1,11 +1,14 @@
 import React from "react";
 import s from "./usersClassComponent.module.css";
 
-import {userType} from "../../redux/users-reducer";
+import { userType} from "../../redux/users-reducer";
 import {NavLink} from "react-router-dom";
+import axios from "axios";
+
 
 //Types
 export type UsersPresentationComponent = {
+    isDisabled:boolean
     onChangePage: (page: number) => void
     totalUsersCount: number
     pageSize: number
@@ -13,6 +16,7 @@ export type UsersPresentationComponent = {
     users: userType[]
     follow: (userId: number) => void
     unfollow: (userId: number) => void
+    isButtonDisabled: (status: boolean) => void
 
 }
 
@@ -25,7 +29,6 @@ export const UsersPresentationComponent = (props: UsersPresentationComponent) =>
     }
 
 
-    debugger
     return <div>
         <div>
             {pages.map(p => <span className={props.currentPage === p ? s.selectedPage : ""}
@@ -36,6 +39,7 @@ export const UsersPresentationComponent = (props: UsersPresentationComponent) =>
 
         {
             props.users.map(u => <div key={u.id}>
+
                 <span>
                     <div>
                         <NavLink to={`/profile/${u.id}`}>
@@ -46,8 +50,38 @@ export const UsersPresentationComponent = (props: UsersPresentationComponent) =>
                     </div>
                     <div>
                         {u.followed
-                            ? <button onClick={() => props.unfollow(u.id)}>Unfollow</button>
-                            : <button onClick={() => props.follow(u.id)}>Follow</button>
+                            ? <button disabled={props.isDisabled} onClick={() => {
+                                props.isButtonDisabled(true)
+                                axios.delete(`https://social-network.samuraijs.com/api/1.0/follow/${u.id}`, {
+                                    withCredentials: true,
+                                    headers: {
+                                        "API-KEY": "395bb44f-c5cd-48fe-9fde-631834ccd660"
+                                    }
+                                })
+                                    .then(res => {
+                                        if (res.data.resultCode === 0) {
+                                            props.unfollow(u.id);
+                                        }
+                                    })
+                                props.isButtonDisabled(false)
+                            }}>Unfollow</button>
+
+
+                            : <button disabled={props.isDisabled} onClick={() => {
+                                props.isButtonDisabled(true)
+                                axios.post(`https://social-network.samuraijs.com/api/1.0/follow/${u.id}`, {}, {
+                                    withCredentials: true,
+                                    headers: {
+                                        "API-KEY": "395bb44f-c5cd-48fe-9fde-631834ccd660"
+                                    }
+                                })
+                                    .then(res => {
+                                        if (res.data.resultCode === 0) {
+                                            props.follow(u.id)
+                                        }
+                                    })
+                                props.isButtonDisabled(false)
+                            }}>Follow</button>
                         }
 
                     </div>

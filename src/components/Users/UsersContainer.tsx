@@ -2,17 +2,17 @@ import React from "react";
 import {connect} from "react-redux";
 import {rootReducerType} from "../../redux/redux-store";
 import {
-    follow,
+    follow, isButtonDisabled,
     setCurrentPage,
     setCurrentPageTotalCount, setPreloaderStatus,
     setUsers,
     unfollow,
     userType
 } from "../../redux/users-reducer";
-import axios from "axios";
+
 import {UsersPresentationComponent} from "./UsersPresentationComponent";
 import preloader from "../../images/loading-svgrepo-com.svg"
-
+import {usersAPI} from "../../api/api";
 
 
 export class UsersComponent extends React.Component<UsersContainerType> {
@@ -21,27 +21,23 @@ export class UsersComponent extends React.Component<UsersContainerType> {
     }
 
     componentDidMount() {
-        this.getUsers()
-    }
-
-    getUsers = () => {
         if (this.props.users.length === 0) {
             this.props.setPreloaderStatus(true)
-            axios.get<ResponseType>(`https://social-network.samuraijs.com/api/1.0/users?page=${this.props.currentPage}&count=${this.props.pageSize}`)
-                .then(res => {
+            usersAPI.getUsers(this.props.currentPage, this.props.pageSize)
+                .then(data => {
                     this.props.setPreloaderStatus(false)
-                    this.props.setUsers(res.data.items)
-                    this.props.setCurrentPageTotalCount(res.data.totalCount)
+                    this.props.setUsers(data.items)
+                    this.props.setCurrentPageTotalCount(data.totalCount)
                 })
         }
-
     }
+
 
     onChangePage = (page: number) => {
         this.props.setPreloaderStatus(true)
         this.props.setCurrentPage(page)
-        axios.get<ResponseType>(`https://social-network.samuraijs.com/api/1.0/users?page=${page}&count=${this.props.pageSize}`)
-            .then(res => this.props.setUsers(res.data.items));
+        usersAPI.getUsers(page, this.props.pageSize)
+            .then(data => this.props.setUsers(data.items));
         this.props.setPreloaderStatus(false)
 
     }
@@ -51,6 +47,7 @@ export class UsersComponent extends React.Component<UsersContainerType> {
             {this.props.isFetching
                 ? <img src={preloader}/>
                 : <UsersPresentationComponent
+                    isDisabled={this.props.isDisabled}
                     onChangePage={this.onChangePage}
                     users={this.props.users}
                     currentPage={this.props.currentPage}
@@ -58,6 +55,7 @@ export class UsersComponent extends React.Component<UsersContainerType> {
                     follow={this.props.follow}
                     unfollow={this.props.unfollow}
                     pageSize={this.props.pageSize}
+                    isButtonDisabled={this.props.isButtonDisabled}
                 />
             }
         </>
@@ -72,14 +70,24 @@ let mapStateToProps = (state: rootReducerType) => {
         totalUsersCount: state.usersPage.totalUsersCount,
         currentPage: state.usersPage.currentPage,
         isFetching: state.usersPage.isFetching,
+        isDisabled: state.usersPage.isDisabled
     }
 }
 
-export const UsersContainer = connect(mapStateToProps, {follow,unfollow,setUsers,setCurrentPage,setCurrentPageTotalCount,setPreloaderStatus})(UsersComponent)
+export const UsersContainer = connect(mapStateToProps, {
+    follow,
+    unfollow,
+    setUsers,
+    setCurrentPage,
+    setCurrentPageTotalCount,
+    setPreloaderStatus,
+    isButtonDisabled
+})(UsersComponent)
 
 //Types
 
 export type UsersContainerType = {
+    isDisabled: boolean
     isFetching: boolean
     pageSize: number
     currentPage: number
@@ -91,6 +99,7 @@ export type UsersContainerType = {
     setCurrentPage: (page: number) => void
     setCurrentPageTotalCount: (count: number) => void
     setPreloaderStatus: (status: boolean) => void
+    isButtonDisabled: (status: boolean) => void
 }
 export type ResponseType = {
     items: userType[]

@@ -4,6 +4,7 @@ let initialState: initialStateType = {
     totalUsersCount: 0,
     currentPage: 3,
     isFetching: false,
+    isDisabled: false,
 }
 
 
@@ -21,7 +22,9 @@ export const usersReducer = (state: initialStateType = initialState, action: com
         case "SET-CURRENT-PAGE-TOTAL-COUNT":
             return {...state, totalUsersCount: action.count}
         case "SET-PRELOADER-STATUS":
-            return {...state,isFetching:action.status}
+            return {...state, isFetching: action.status}
+        case "IS-DISABLED-BUTTON":
+            return {...state,isDisabled:action.status}
         default:
             return state
     }
@@ -65,6 +68,13 @@ export const setPreloaderStatus = (status: boolean) => {
 
     } as const
 }
+export const isButtonDisabled = (status: boolean) => {
+    return {
+        type: "IS-DISABLED-BUTTON",
+        status
+
+    } as const
+}
 
 
 //Types
@@ -86,6 +96,7 @@ export type initialStateType = {
     totalUsersCount: number
     currentPage: number
     isFetching: boolean
+    isDisabled: boolean
 }
 export type followAcType = ReturnType<typeof follow>
 export type unfollowAcType = ReturnType<typeof unfollow>
@@ -93,6 +104,7 @@ export type setUsersAcType = ReturnType<typeof setUsers>
 export type setCurrentPageAcType = ReturnType<typeof setCurrentPage>
 export type setCurrentPageTotalCountAcType = ReturnType<typeof setCurrentPageTotalCount>
 export type PreloaderAcType = ReturnType<typeof setPreloaderStatus>
+export type isButtonDisabledAcType = ReturnType<typeof isButtonDisabled>
 export type combineAcTypes =
     | followAcType
     | unfollowAcType
@@ -100,3 +112,4 @@ export type combineAcTypes =
     | setCurrentPageAcType
     | setCurrentPageTotalCountAcType
     | PreloaderAcType
+    | isButtonDisabledAcType
