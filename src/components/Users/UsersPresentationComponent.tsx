@@ -1,14 +1,14 @@
 import React from "react";
 import s from "./usersClassComponent.module.css";
 
-import { userType} from "../../redux/users-reducer";
+import {userType} from "../../redux/users-reducer";
 import {NavLink} from "react-router-dom";
 import axios from "axios";
 
 
 //Types
 export type UsersPresentationComponent = {
-    isDisabled:boolean
+    isDisabled: boolean
     onChangePage: (page: number) => void
     totalUsersCount: number
     pageSize: number
@@ -62,8 +62,9 @@ export const UsersPresentationComponent = (props: UsersPresentationComponent) =>
                                         if (res.data.resultCode === 0) {
                                             props.unfollow(u.id);
                                         }
+                                        props.isButtonDisabled(false)
                                     })
-                                props.isButtonDisabled(false)
+
                             }}>Unfollow</button>
 
 
@@ -79,8 +80,9 @@ export const UsersPresentationComponent = (props: UsersPresentationComponent) =>
                                         if (res.data.resultCode === 0) {
                                             props.follow(u.id)
                                         }
+                                        props.isButtonDisabled(false)
                                     })
-                                props.isButtonDisabled(false)
+
                             }}>Follow</button>
                         }
 

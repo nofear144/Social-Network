@@ -24,6 +24,7 @@ export const usersReducer = (state: initialStateType = initialState, action: com
         case "SET-PRELOADER-STATUS":
             return {...state, isFetching: action.status}
         case "IS-DISABLED-BUTTON":
+            console.log(action.status)
             return {...state,isDisabled:action.status}
         default:
             return state
