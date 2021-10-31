@@ -2,17 +2,16 @@ import React from "react";
 import {connect} from "react-redux";
 import {rootReducerType} from "../../redux/redux-store";
 import {
-    follow, isButtonDisabled,
+    follow,
+    followSuccess, getUsers, isButtonDisabled,
     setCurrentPage,
     setCurrentPageTotalCount, setPreloaderStatus,
-    setUsers,
-    unfollow,
+    setUsers, unfollow,
+    unfollowSuccess,
     userType
 } from "../../redux/users-reducer";
-
 import {UsersPresentationComponent} from "./UsersPresentationComponent";
 import preloader from "../../images/loading-svgrepo-com.svg"
-import {usersAPI} from "../../api/api";
 
 
 export class UsersComponent extends React.Component<UsersContainerType> {
@@ -21,25 +20,12 @@ export class UsersComponent extends React.Component<UsersContainerType> {
     }
 
     componentDidMount() {
-        if (this.props.users.length === 0) {
-            this.props.setPreloaderStatus(true)
-            usersAPI.getUsers(this.props.currentPage, this.props.pageSize)
-                .then(data => {
-                    this.props.setPreloaderStatus(false)
-                    this.props.setUsers(data.items)
-                    this.props.setCurrentPageTotalCount(data.totalCount)
-                })
-        }
+        this.props.getUsers(this.props.currentPage, this.props.pageSize)
     }
 
 
     onChangePage = (page: number) => {
-        this.props.setPreloaderStatus(true)
-        this.props.setCurrentPage(page)
-        usersAPI.getUsers(page, this.props.pageSize)
-            .then(data => this.props.setUsers(data.items));
-        this.props.setPreloaderStatus(false)
-
+        this.props.getUsers(page, this.props.pageSize)
     }
 
     render() {
@@ -75,13 +61,16 @@ let mapStateToProps = (state: rootReducerType) => {
 }
 
 export const UsersContainer = connect(mapStateToProps, {
-    follow,
     unfollow,
+    follow,
+    followSuccess,
+    unfollowSuccess,
     setUsers,
     setCurrentPage,
     setCurrentPageTotalCount,
     setPreloaderStatus,
-    isButtonDisabled
+    isButtonDisabled,
+    getUsers
 })(UsersComponent)
 
 //Types
@@ -93,13 +82,16 @@ export type UsersContainerType = {
     currentPage: number
     totalUsersCount: number
     users: userType[]
-    follow: (userId: number) => void
-    unfollow: (userId: number) => void
+    followSuccess: (userId: number) => void
+    unfollowSuccess: (userId: number) => void
     setUsers: (users: userType[]) => void
     setCurrentPage: (page: number) => void
     setCurrentPageTotalCount: (count: number) => void
     setPreloaderStatus: (status: boolean) => void
     isButtonDisabled: (status: boolean) => void
+    getUsers: (currentPage: number, pageSize: number) => void
+    follow: (userId: number) => void
+    unfollow: (userId: number) => void
 }
 export type ResponseType = {
     items: userType[]

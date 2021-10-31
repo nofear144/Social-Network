@@ -7,6 +7,7 @@ import {DialogsType, MessagesType} from "../../redux/state";
 
 
 export type MapStatePropsType = {
+    isAuth:boolean
     messages: MessagesType
     newMessage: string
     sendMessage: () => void
@@ -19,7 +20,8 @@ let mapStateToProps = (state: rootReducerType) => {
     return {
         messages: state.messagesPage.messages,
         newMessage: state.messagesPage.newMessageBody,
-        userArray:state.profile.dialogs
+        userArray:state.profile.dialogs,
+        isAuth:state.auth.isAuth,
     }
 }
 let mapDispatchToProps = (dispatch: Dispatch) => {

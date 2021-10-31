@@ -1,4 +1,6 @@
 import {stat} from "fs";
+import {Dispatch} from "redux";
+import {usersAPI} from "../api/api";
 
 let initialState: initialStateType = {
 
@@ -19,8 +21,21 @@ export const setAuthReducer = (state: initialStateType = initialState, action: c
     }
 
 }
-//Action Creators
 
+
+//THUNKS
+export const LoginData = () => (dispatch:Dispatch) => {
+    usersAPI.isLogged()
+        .then(data => {
+            if (data.resultCode === 0) {
+                let {id, login, email} = data.data
+                dispatch(setUserData(id, email, login))
+            }
+        })
+}
+
+
+//Action Creators
 export const setUserData = (userId: number, email: string, login: string) => {
     return {
         type: "SET-USER-DATA",
@@ -31,8 +46,6 @@ export const setUserData = (userId: number, email: string, login: string) => {
         }
     } as const
 }
-
-
 //Types
 
 

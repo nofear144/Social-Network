@@ -1,9 +1,8 @@
 import React from "react";
 import s from "./usersClassComponent.module.css";
-
 import {userType} from "../../redux/users-reducer";
 import {NavLink} from "react-router-dom";
-import axios from "axios";
+
 
 
 //Types
@@ -50,40 +49,19 @@ export const UsersPresentationComponent = (props: UsersPresentationComponent) =>
                     </div>
                     <div>
                         {u.followed
-                            ? <button disabled={props.isDisabled} onClick={() => {
-                                props.isButtonDisabled(true)
-                                axios.delete(`https://social-network.samuraijs.com/api/1.0/follow/${u.id}`, {
-                                    withCredentials: true,
-                                    headers: {
-                                        "API-KEY": "395bb44f-c5cd-48fe-9fde-631834ccd660"
-                                    }
-                                })
-                                    .then(res => {
-                                        if (res.data.resultCode === 0) {
-                                            props.unfollow(u.id);
-                                        }
-                                        props.isButtonDisabled(false)
-                                    })
-
-                            }}>Unfollow</button>
+                            ? <button disabled={props.isDisabled}
+                                      onClick={() => {
+                                          props.unfollow(u.id)
+                                      }
+                                      }>Unfollow
+                            </button>
 
 
-                            : <button disabled={props.isDisabled} onClick={() => {
-                                props.isButtonDisabled(true)
-                                axios.post(`https://social-network.samuraijs.com/api/1.0/follow/${u.id}`, {}, {
-                                    withCredentials: true,
-                                    headers: {
-                                        "API-KEY": "395bb44f-c5cd-48fe-9fde-631834ccd660"
-                                    }
-                                })
-                                    .then(res => {
-                                        if (res.data.resultCode === 0) {
-                                            props.follow(u.id)
-                                        }
-                                        props.isButtonDisabled(false)
-                                    })
-
-                            }}>Follow</button>
+                            : <button disabled={props.isDisabled}
+                                      onClick={() => {
+                                          props.follow(u.id)
+                                      }}>Follow
+                            </button>
                         }
 
                     </div>

@@ -1,3 +1,6 @@
+import {Dispatch} from "redux";
+import {usersAPI} from "../api/api";
+
 let initialState: initialStateType = {
     users: [],
     pageSize: 5,
@@ -25,20 +28,20 @@ export const usersReducer = (state: initialStateType = initialState, action: com
             return {...state, isFetching: action.status}
         case "IS-DISABLED-BUTTON":
             console.log(action.status)
-            return {...state,isDisabled:action.status}
+            return {...state, isDisabled: action.status}
         default:
             return state
     }
 
 }
 //Action Creators
-export const follow = (userId: number) => {
+export const followSuccess = (userId: number) => {
     return {
         type: "FOLLOW",
         userId,
     } as const
 }
-export const unfollow = (userId: number) => {
+export const unfollowSuccess = (userId: number) => {
     return {
         type: "UNFOLLOW",
         userId,
@@ -77,9 +80,40 @@ export const isButtonDisabled = (status: boolean) => {
     } as const
 }
 
+//THUNKS CREATORS
+
+export const follow = (userId: number) => (dispatch: Dispatch) => {
+    dispatch(isButtonDisabled(true))
+    usersAPI.follow(userId)
+        .then(data => {
+            if (data.resultCode === 0) {
+                dispatch(followSuccess(userId))
+            }
+            dispatch(isButtonDisabled(false))
+        })
+}
+
+export const unfollow = (userId: number) => (dispatch: Dispatch) => {
+    dispatch(isButtonDisabled(true))
+    usersAPI.unfollow(userId)
+        .then(data => {
+            if (data.resultCode === 0) {
+                dispatch(unfollowSuccess(userId))
+            }
+            dispatch(isButtonDisabled(false))
+        })
+}
+export const getUsers = (currentPage: number, pageSize: number) => (dispatch: Dispatch) => {
+    dispatch(setPreloaderStatus(true))
+    usersAPI.getUsers(currentPage, pageSize)
+        .then(data => {
+            dispatch(setPreloaderStatus(false))
+            dispatch(setUsers(data.items))
+            dispatch(setCurrentPageTotalCount(data.totalCount))
+        })
+}
 
 //Types
-
 export type userType = {
     name: string
     id: number
@@ -99,8 +133,8 @@ export type initialStateType = {
     isFetching: boolean
     isDisabled: boolean
 }
-export type followAcType = ReturnType<typeof follow>
-export type unfollowAcType = ReturnType<typeof unfollow>
+export type followAcType = ReturnType<typeof followSuccess>
+export type unfollowAcType = ReturnType<typeof unfollowSuccess>
 export type setUsersAcType = ReturnType<typeof setUsers>
 export type setCurrentPageAcType = ReturnType<typeof setCurrentPage>
 export type setCurrentPageTotalCountAcType = ReturnType<typeof setCurrentPageTotalCount>

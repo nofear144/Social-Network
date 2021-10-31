@@ -1,5 +1,7 @@
 import {PostType, profilePageType} from "./state";
-import {ResponseProfileType} from "../components/Profile/ProfileContainer";
+import {Dispatch} from "redux";
+import {usersAPI} from "../api/api";
+
 
 let initialState = {
     posts: [
@@ -59,6 +61,14 @@ export const profileReducer = (state: profilePageType = initialState, action: co
 
 }
 
+
+//THUNKS
+export const getProfile = (userId: number) => (dispatch: Dispatch) => {
+   usersAPI.getProfile(userId)
+        .then(data => {
+           dispatch(setUserProfile(data))
+        })
+}
 
 //AC
 export const changeNewTextAC = (newText: string) => {
