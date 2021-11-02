@@ -3,7 +3,7 @@ import React from "react";
 import Profile from "./Profile";
 
 import {connect} from "react-redux";
-import {getProfile, setUserProfile} from "../../redux/profile-reducer";
+import {getProfile, getStatus, setUserProfile, updateStatus} from "../../redux/profile-reducer";
 import {rootReducerType} from "../../redux/redux-store";
 import {photosType} from "../../redux/users-reducer";
 import { RouteComponentProps, withRouter} from "react-router-dom";
@@ -22,44 +22,49 @@ class ProfileComponent extends React.Component<PropsType> {
 
         let userId = this.props.match.params.userId
         if (!userId) {
-            userId = "2"
+            userId = "19599"
         }
         this.props.getProfile(+userId)
+        this.props.getStatus(+userId)
+
     }
 
 
     render() {
         return (
             <div>
-                <Profile profile={this.props.profilePage}/>
+                <Profile
+                    profile={this.props.profilePage}
+                    status={this.props.status}
+                    updateStatus={this.props.updateStatus}
+                />
             </div>
         )
     }
 }
 
-
-
 let mapStateToProps = (state: rootReducerType) => ({
     profilePage: state.profile.profile,
+    status:state.profile.status,
 })
 
-export default compose(
-    withAuthRedirect,
+export default compose<React.ComponentType>(
+    connect(mapStateToProps, {setUserProfile, getProfile,getStatus,updateStatus}),
     withRouter,
-    connect(mapStateToProps, {setUserProfile, getProfile})
+    //withAuthRedirect,
+
 )(ProfileComponent)
 
 
-/*let AuthRedirectComponent = withAuthRedirect(ProfileComponent)*/
-/*let withUrlDataContainerComponent = withRouter(AuthRedirectComponent);
- connect(mapStateToProps, {setUserProfile, getProfile})(withUrlDataContainerComponent)*/
 
 
 //Types
 
 export type ProfileContainerType = {
-
+    getStatus:(userId:number)=>void
+    updateStatus:(status:string)=>void
     getProfile: (userId: number) => void
+    status:string
     profilePage: ResponseProfileType
     setUserProfile: (profile: ResponseProfileType) => void
 }

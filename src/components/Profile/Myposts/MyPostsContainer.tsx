@@ -1,9 +1,8 @@
 import {rootReducerType} from "../../../redux/redux-store";
 import {Dispatch} from "redux";
-import { PostsType} from "../../../redux/state";
 import {connect} from "react-redux";
 import MyPosts from "./MyPosts";
-import {addPostAC, changeNewTextAC} from "../../../redux/profile-reducer";
+import {addPostAC, changeNewTextAC, PostsType} from "../../../redux/profile-reducer";
 
 export type MyPostsContainerType = {
     posts: PostsType

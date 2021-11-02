@@ -1,6 +1,7 @@
 import axios from "axios";
 import {ResponseType} from "../components/Users/UsersContainer";
 import {ResponseProfileType} from "../components/Profile/ProfileContainer";
+import {ResponseProfileStatusType} from "../redux/profile-reducer";
 
 const instance = axios.create({
     baseURL: "https://social-network.samuraijs.com/api/1.0/",
@@ -29,8 +30,24 @@ export const usersAPI = {
             .then(res => res.data)
     },
     getProfile(userId: number) {
-        return instance.get<ResponseProfileType>(`profile/${userId}`)
-            .then(res => res.data)
-    }
+        console.warn("Obsolete method. Please use profileAPI object. ")
+        return profileAPI.getProfile(userId)
+    },
 
 }
+export const profileAPI = {
+    getProfile(userId: number) {
+        return instance.get<ResponseProfileType>(`profile/${userId}`)
+            .then(res => res.data)
+    },
+    getStatus(userId: number) {
+        return instance.get(`profile/status/${userId}`)
+            .then(res=>res.data)
+    },
+    updateStatus(status:string){
+        return instance.put(`profile/status`,{status})
+            .then(res=>res.data)
+    }
+}
+
+

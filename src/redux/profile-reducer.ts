@@ -1,6 +1,7 @@
-import {PostType, profilePageType} from "./state";
+import {DialogType} from "./state";
 import {Dispatch} from "redux";
-import {usersAPI} from "../api/api";
+import {profileAPI, usersAPI} from "../api/api";
+import {ResponseProfileType} from "../components/Profile/ProfileContainer";
 
 
 let initialState = {
@@ -12,7 +13,7 @@ let initialState = {
     ],
     newPostText: "",
     profile: {
-        userId: 2,
+        userId: 19599,
         lookingForAJob: true,
         lookingForAJobDescription: "",
         fullName: "",
@@ -32,7 +33,6 @@ let initialState = {
             large: ""
         },
     },
-
     dialogs: [
         {id: 1, name: "Dmitriy.K"},
         {id: 2, name: "Ekaterina.G"},
@@ -40,6 +40,7 @@ let initialState = {
         {id: 4, name: "Zakhar.Y"},
         {id: 5, name: "Pavel.M"},
     ],
+    status: "",
 }
 
 export const profileReducer = (state: profilePageType = initialState, action: combineAcTypesForProfile): profilePageType => {
@@ -55,6 +56,8 @@ export const profileReducer = (state: profilePageType = initialState, action: co
             return {...state, newPostText: action.newText}
         case "SET-USER-PROFILE":
             return {...state, profile: action.profile}
+        case "SET-STATUS":
+            return {...state,status:action.status}
         default:
             return state
     }
@@ -64,9 +67,23 @@ export const profileReducer = (state: profilePageType = initialState, action: co
 
 //THUNKS
 export const getProfile = (userId: number) => (dispatch: Dispatch) => {
-   usersAPI.getProfile(userId)
+    usersAPI.getProfile(userId)
         .then(data => {
-           dispatch(setUserProfile(data))
+            dispatch(setUserProfile(data))
+        })
+}
+export const getStatus = (userId: number) => (dispatch: Dispatch) => {
+    profileAPI.getStatus(userId)
+        .then(data => {
+            dispatch(setStatus(data))
+        })
+}
+export const updateStatus = (status: string) => (dispatch: Dispatch) => {
+    profileAPI.updateStatus(status)
+        .then(data => {
+            if(data.resultCode===0){
+                dispatch(setStatus(status))
+            }
         })
 }
 
@@ -89,7 +106,37 @@ export const setUserProfile = (profile: any) => {
         profile
     } as const
 }
+export const setStatus = (status: string) => {
+    return {
+        type: "SET-STATUS",
+        status
+    }as const
+}
+
+
+//Types
+export type ResponseProfileStatusType={
+    resultCode:number
+    messages:string[]
+    data:{}
+}
+export type PostType = {
+    id: number
+    message: string
+    value: number
+}
+export type PostsType = PostType[]
+export type DialogsType = Array<DialogType>;
+export type profilePageType = {
+    posts: PostsType
+    newPostText: string
+    dialogs: DialogsType
+    profile: ResponseProfileType
+    status: string
+}
+
 export type combineAcTypesForProfile =
     | ReturnType<typeof changeNewTextAC>
     | ReturnType<typeof addPostAC>
     | ReturnType<typeof setUserProfile>
+    | ReturnType<typeof setStatus>

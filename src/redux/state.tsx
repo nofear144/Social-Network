@@ -10,27 +10,16 @@ export type DialogType = {
     id: number
     name: string
 }
-export type MessageType = {
-    id: number
-    text: string
-}
-export type PostType = {
-    id: number
-    message: string
-    value: number
-}
-export type PostsType = PostType[]
-export type DialogsType = Array<DialogType>;
-export type MessagesType = Array<MessageType>;
-export type profilePageType = {
-    posts: PostsType
-    newPostText: string
-    dialogs: DialogsType
-    profile:ResponseProfileType
-}
+
+
 export type messagesPageType = {
     messages: MessagesType
     newMessageBody: string
+}
+export type MessagesType = Array<MessageType>;
+export type MessageType = {
+    id: number
+    text: string
 }
 /*export type  stateType = {
     profile: profilePageType
