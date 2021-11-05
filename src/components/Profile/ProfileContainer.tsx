@@ -7,7 +7,6 @@ import {getProfile, getStatus, setUserProfile, updateStatus} from "../../redux/p
 import {rootReducerType} from "../../redux/redux-store";
 import {photosType} from "../../redux/users-reducer";
 import { RouteComponentProps, withRouter} from "react-router-dom";
-import {withAuthRedirect} from "../../hoc/withAuthRedirect";
 import {compose} from "redux";
 
 

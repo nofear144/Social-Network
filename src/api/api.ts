@@ -1,7 +1,7 @@
-import axios from "axios";
+import axios, {AxiosResponse} from "axios";
 import {ResponseType} from "../components/Users/UsersContainer";
 import {ResponseProfileType} from "../components/Profile/ProfileContainer";
-import {ResponseProfileStatusType} from "../redux/profile-reducer";
+
 
 const instance = axios.create({
     baseURL: "https://social-network.samuraijs.com/api/1.0/",
@@ -42,11 +42,38 @@ export const profileAPI = {
     },
     getStatus(userId: number) {
         return instance.get(`profile/status/${userId}`)
-            .then(res=>res.data)
+            .then(res => res.data)
     },
-    updateStatus(status:string){
-        return instance.put(`profile/status`,{status})
-            .then(res=>res.data)
+    updateStatus(status: string) {
+        return instance.put(`profile/status`, {status})
+            .then(res => res.data)
+    }
+
+}
+
+export const authAPI = {
+    login(email:string,password:string,rememberMe:boolean,captcha?:string) {
+        return instance.post<{email:string,password:string,rememberMe:boolean,captcha?:string}, AxiosResponse<ResponseLoginType>>('auth/login', {email,password,rememberMe,captcha})
+
+    },
+    logout() {
+       return  instance.delete("auth/login")
+    }
+}
+
+
+//Types
+export type payloadType = {
+    email: string,
+    password: string,
+    rememberMe: false
+    captcha?: string
+}
+export type ResponseLoginType = {
+    resultCode: number
+    messages: string[]
+    data: {
+        userId:number
     }
 }
 

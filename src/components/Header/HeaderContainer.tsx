@@ -35,6 +35,6 @@ export default connect(mapStateToProps, {setUserData,LoginData})(HeaderContainer
 type HeaderContainerPropsType = {
     isAuth: boolean
     login: string
-    setUserData: (id: number, email: string, login: string) => void
+    setUserData: (id: number, email: string, login: string,isAuth:boolean) => void
     LoginData:()=>void
 }

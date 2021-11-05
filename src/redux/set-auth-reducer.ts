@@ -1,5 +1,5 @@
 import {Dispatch} from "redux";
-import {usersAPI} from "../api/api";
+import {authAPI, payloadType, usersAPI} from "../api/api";
 
 let initialState: initialStateType = {
 
@@ -23,25 +23,44 @@ export const setAuthReducer = (state: initialStateType = initialState, action: c
 
 
 //THUNKS
-export const LoginData = () => (dispatch:Dispatch) => {
+export const LoginData = () => (dispatch: Dispatch) => {
     usersAPI.isLogged()
         .then(data => {
             if (data.resultCode === 0) {
                 let {id, login, email} = data.data
-                dispatch(setUserData(id, email, login))
+                dispatch(setUserData(id, email, login, true))
+            }
+        })
+}
+
+export const loginDataFromFormik = (email:string,password:string,rememberMe:boolean) => (dispatch: Dispatch<any>) => {
+    authAPI.login(email,password,rememberMe,)
+        .then(res => {
+            if (res.data.resultCode === 0) {
+
+                dispatch(LoginData())
+            }
+        })
+}
+export const logout = () => (dispatch: Dispatch<combineAcTypes>) => {
+    authAPI.logout()
+        .then(res => {
+            if (res.data.resultCode === 0) {
+                dispatch(setUserData( 1,"", "", false))
             }
         })
 }
 
 
 //Action Creators
-export const setUserData = (userId: number, email: string, login: string) => {
+export const setUserData = (userId: number, email: string,login: string, isAuth:boolean) => {
     return {
         type: "SET-USER-DATA",
         data: {
             userId,
             email,
-            login
+            login,
+            isAuth
         }
     } as const
 }
